@@ -79,8 +79,9 @@ function plugin(options) {
         var contents = file.contents.toString();
 
         renames.forEach(function replaceOnce(rename) {
-          var unreved = options.modifyUnreved ? options.modifyUnreved(rename.unreved) : rename.unreved;
-          var reved = options.modifyReved ? options.modifyReved(rename.reved) : rename.reved;
+          // search for asset paths relative to the files path
+          var unreved = path.relative(path.dirname(file.relative), rename.unreved);
+          var reved = path.relative(path.dirname(file.relative), rename.reved);
           contents = contents.split(unreved).join(reved);
           if (options.prefix) {
             contents = contents.split('/' + options.prefix).join(options.prefix + '/');
